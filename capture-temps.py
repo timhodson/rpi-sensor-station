@@ -30,20 +30,8 @@ while True:
         print("%s: %s" % (strftime("%a, %d %b %Y %H:%M:%S", gmtime()), msg))
         for response in llap.get_responses(msg):
             response['time'] = strftime("%a, %d %b %Y %H:%M:%S", gmtime())
+            print response.values()
             csv_writer.writerow(response.values())
+            ofh.flush()
     sleep(1 * 60)
 
-
-
-# code flow
-# event based
-    # for each event
-    # log raw msg
-    # split message into components
-    # store messages by device and by event.
-    #
-# batt event
-
-# battlow event
-    # some sort of alert via twitter/sms/email?
-# temp reading event
