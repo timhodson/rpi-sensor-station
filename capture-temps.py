@@ -30,7 +30,7 @@ while True:
         print("%s: %s" % (strftime("%a, %d %b %Y %H:%M:%S", gmtime()), msg))
         for response in llap.get_responses(msg):
             response['time'] = strftime("%a, %d %b %Y %H:%M:%S", gmtime())
-            csv_writer.writerow(response)
+            csv_writer.writerow(response.values())
     sleep(1 * 60)
 
 
