@@ -15,7 +15,7 @@ if len(sys.argv) < 2:
 
 outfile = sys.argv[1]
 ofh = open(outfile, 'w')
-csv_writer = csv.writer(ofh, dialect='Excel')
+csv_writer = csv.writer(ofh, dialect='excel')
 
 llap = LLAP()
 
