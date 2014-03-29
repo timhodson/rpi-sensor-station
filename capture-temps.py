@@ -1,7 +1,7 @@
 __author__ = 'timhodson'
 # based on an example by http://www.seanlandsman.com/2013/02/the-raspberry-pi-and-wireless-rf-xrf.html?m=1
 import serial
-from time import sleep, gmtime, strftime
+from time import sleep, gmtime, strftime, time
 import csv
 import sys
 from LLAP import LLAP
@@ -29,7 +29,7 @@ while True:
         msg = ser.read(n)
         print("%s: %s" % (strftime("%a, %d %b %Y %H:%M:%S", gmtime()), msg))
         for response in llap.get_responses(msg):
-            response['time'] = strftime("%a, %d %b %Y %H:%M:%S", gmtime())
+            response['time'] = time()
             print response.values()
             csv_writer.writerow(response.values())
             ofh.flush()
