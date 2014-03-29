@@ -43,6 +43,7 @@ class LLAP:
     def get_responses(self, msg):
         responses = []
         if len(msg) % 12 != 0:
+            print "'%s'" % msg
             raise Exception("message not divisible by 12")
         msg_count = len(msg)/12
         s = 0
