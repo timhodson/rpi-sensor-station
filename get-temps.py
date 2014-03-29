@@ -1,4 +1,4 @@
-__author__ = 'timhodson'
+# straight from an example by http://www.seanlandsman.com/2013/02/the-raspberry-pi-and-wireless-rf-xrf.html?m=1
 
 import serial
 from time import sleep, gmtime, strftime
