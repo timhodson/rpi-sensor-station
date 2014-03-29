@@ -16,9 +16,17 @@ try:
 except Exception:
     print "failed as expected with request HELLOHELLO"
 
-print llap.get_responses("aABTMPA23.13")
+def print_data(event, data):
+    print "EVENT %s TRIGGERED and passed DATA: %s" % (event, pformat(data))
+
+llap.register_observer('TMPA', print_data)
+
+
 print llap.get_responses("aABBATT2.67-")
 print llap.get_responses("aABAWAKE----")
 print llap.get_responses("aABSLEEPING-")
 
 print pformat(llap.get_responses("aABTMPA20.23aABAWAKE----aABBATT2.76-aABSLEEPING-"))
+
+print "TEST: call get_responses without capturing return value - just relying on event to trigger something "
+llap.get_responses("aABTMPA23.13")

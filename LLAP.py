@@ -22,6 +22,8 @@ class LLAP:
         # not bothered with the other 'tweeks' that we could do.
     }
 
+    observers = []
+
     def __init__(self):
         pass
 
@@ -38,6 +40,7 @@ class LLAP:
             if key in msg:
                 bits['responseType'] = msg[3:3+len(key)]
                 bits['responseValue'] = msg[3+len(key):].rstrip("-")
+        self.notify_observers(bits['responseType'], bits)
         return bits
 
     def get_responses(self, msg):
@@ -64,4 +67,11 @@ class LLAP:
         if len(msg) > 12:
             raise Exception("completed request is too long")
 
+    def register_observer(self, event,  observer):
+        self.observers.append({event: observer})
+
+    def notify_observers(self, event, data):
+        for observer in self.observers:
+            if observer.keys()[0] == event:
+                observer.values()[0](event, data)
 #ends
