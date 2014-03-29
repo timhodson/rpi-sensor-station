@@ -28,7 +28,6 @@ class LLAP:
     def split_msg(self, msg):
         # split the message up into bits
         # there may be more than one llap response in a message
-        print "split_msg:input: ", msg
         self.validate_msg(msg)
         bits = {
             'raw': msg,
@@ -48,9 +47,7 @@ class LLAP:
         msg_count = len(msg)/12
         s = 0
         for i in range(1, msg_count+1):
-            print i, " : ", msg_count
             e = i*12
-            print msg[s:e]
             responses.append(self.split_msg(msg[s:e]))
             s += 12  # increment start ready for next loop
         return responses
