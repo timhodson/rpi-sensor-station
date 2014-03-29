@@ -29,7 +29,7 @@ while True:
         msg = ser.read(n)
         print("%s: %s" % (strftime("%a, %d %b %Y %H:%M:%S", gmtime()), msg))
         for response in llap.get_responses(msg):
-            response.prepend(strftime("%a, %d %b %Y %H:%M:%S", gmtime()))
+            response['time'] = strftime("%a, %d %b %Y %H:%M:%S", gmtime())
             csv_writer.writerow(response)
     sleep(1 * 60)
 
