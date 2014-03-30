@@ -7,6 +7,7 @@ import sys
 import os
 from LLAP import LLAP
 from firebase import firebase
+from pprint import pformat
 
 # serial configuration
 DEVICE = '/dev/ttyAMA0'
@@ -40,7 +41,8 @@ def csv_writer_callback(response):
 
 def firebase_writer_callback(data):
     # write some data to firebase for temperature readings.
-    fb.put('/' + data['deviceId'], data['time'], data)
+    request = fb.put('/' + data['deviceId'], data['time'], data)
+    print pformat(request)
 
 # set up our llap callbacks
 llap = LLAP()
