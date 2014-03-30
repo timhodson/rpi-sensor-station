@@ -44,8 +44,7 @@ def firebase_writer_callback(data):
     data['time'] = time()
     data['.priority'] = int(data['time'])
     data['readingId'] = str(data['time']).replace('.', data['deviceId'])  # replace period with deviceID
-    request = fb.put('/' + data['deviceId'], data['readingId'], data)
-    print pformat(request)
+    fb.put('/' + data['deviceId'], data['readingId'], data)
 
 # set up our llap callbacks
 llap = LLAP()
