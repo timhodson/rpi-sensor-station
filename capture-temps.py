@@ -43,7 +43,7 @@ def firebase_writer_callback(data):
     # write some data to firebase for temperature readings.\
     data['time'] = time()
     data['.priority'] = int(data['time'])
-    data['readingId'] = data['time'].replace('.', data['deviceId'])  # replace period with deviceID
+    data['readingId'] = str(data['time']).replace('.', data['deviceId'])  # replace period with deviceID
     request = fb.put('/' + data['deviceId'], data['readingId'], data)
     print pformat(request)
 
