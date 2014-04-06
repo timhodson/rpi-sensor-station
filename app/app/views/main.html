@@ -1,0 +1,58 @@
+<div class="header">
+    <ul class="nav nav-pills pull-right">
+        <li class="active"><a ng-href="#">Home</a></li>
+        <li><a ng-href="#">About</a></li>
+        <li><a ng-href="#">Contact</a></li>
+    </ul>
+    <h3 class="text-muted">RPi Sensor Station</h3>
+</div>
+<div class="row">
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="panel panel-default " ng-repeat="temp in ght">
+            <div class="panel-body">
+                <h1 class="sensor-reading"><span class="glyphicon glyphicon-leaf"></span> {{temp.responseValue}}
+                    <small>ºC</small>
+                </h1>
+            </div>
+            <div class="panel-footer">
+                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
+                <p>Green House Temperature</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <div class="panel panel-default " ng-repeat="temp in lt">
+            <div class="panel-body">
+                <h1 class="sensor-reading"><span class="glyphicon glyphicon-home"></span> {{temp.responseValue}}
+                    <small>ºC</small>
+                </h1>
+            </div>
+            <div class="panel-footer">
+                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
+                <p>Lounge Temperature</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title"><span class="glyphicon glyphicon-leaf"></span> Green House</h4>
+    </div>
+    <div class="panel-body">
+        <div ac-chart="chartType" ac-data="chartData1" ac-config="chartConfig1" id='chart' class='chart'></div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title"><span class="glyphicon glyphicon-home"></span> Lounge</h4>
+    </div>
+    <div class="panel-body">
+        <div ac-chart="chartType" ac-data="chartData2" ac-config="chartConfig2" id='chart' class='chart'></div>
+    </div>
+</div>
+<div class="footer">
+    <p><a href="http://timhodson.com" title="Who bothered to build this?">timhodson.com</a></p>
+</div>
