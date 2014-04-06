@@ -15,9 +15,12 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
   min-height: 300px;
   min-width: 300px;
 }
+ .char * {
+   overflow: visible;
+ }
 
 .chart g.x.axis g.tick text{
-  visibility: hidden;
+  @include rotate(55deg);
 }
 
 .browsehappy {
