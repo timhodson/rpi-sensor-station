@@ -20,7 +20,8 @@ $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
  }
 
 .chart g.x.axis g.tick text{
-  @include rotate(55deg);
+  /* @include rotate(55deg);*/
+  visibility: hidden;
 }
 
 .browsehappy {

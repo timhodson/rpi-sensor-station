@@ -57,44 +57,47 @@ angular.module('appApp')
       return deferred.promise;
     };
 
+    $scope.getChartConfig = function (readings, minutes) {
+
+      var deferred = $q.defer();
+      var config = {
+        labels: false,
+        tooltips: true,
+        click: function (d) {
+          console.log(d);
+        },
+        title: 'Temperature - last ' + (readings * minutes / 60) + ' hours from ' + dateFilter(new Date(), 'yyyy-MM-dd HH:mm:ss'),
+        legend: {
+          display: false,
+          position: 'left'
+        },
+        height: '600px'
+      };
+      deferred.resolve(config);
+      return deferred.promise;
+
+    };
     // 288 * 5 min = 24 hours
     $scope.$watch('[ght, ghtReadings]', function () {
       //$scope.chartData1 = {};
       $scope.getChartData('AB', $scope.ghtReadings).then(function (data) {
         $scope.chartData1 = data;
       }); // taken every 5 mins
+      $scope.getChartConfig($scope.ghtReadings, 5).then(function (data) {
+        $scope.chartConfig1 = data;
+      });
     }, true);
 
     $scope.$watch('[lt, ltReadings]', function () {
       //$scope.chartData2 = {};
-      $scope.getChartData('AA', $scope.ltReadings).then(function(data){
+      $scope.getChartData('AA', $scope.ltReadings).then(function (data) {
         $scope.chartData2 = data;
       }); // taken every 10 mins
+      $scope.getChartConfig($scope.ltReadings, 10).then(function (data) {
+        $scope.chartConfig2 = data;
+      });
     }, true);
 
     $scope.chartType = 'line';
-    $scope.chartConfig1 = {
-      labels: false,
-      tooltips: true,
-      click: function (d) {
-        console.log(d);
-      },
-      title: 'Temperature - last ' + ($scope.ghtReadings * 5 / 60) + ' hours from ' + dateFilter(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-      legend: {
-        display: false,
-        position: 'left'
-      },
-      height: '600px'
-    };
-    $scope.chartConfig2 = {
-      labels: false,
-      tooltips: true,
-      title: 'Temperature - last ' + ($scope.ltReadings * 10 / 60) + ' hours from ' + dateFilter(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-      legend: {
-        display: false,
-        position: 'left'
-      },
-      height: '600px'
-  };
 
   }]);
