@@ -1,5 +1,6 @@
 __author__ = 'timhodson'
 
+from time import time
 
 # a python module to support llap
 # currently mainly the llap Thermister device Persona
@@ -39,8 +40,8 @@ class LLAP:
         self.validate_msg(response)
         bits = {
             'raw': response,
-            #'a': response[0],
-            'deviceId': response[1:3]
+            'deviceId': response[1:3],
+            'time': time()
         }
         for key in self.RESPONSES.keys():
             if key in response:
@@ -59,17 +60,29 @@ class LLAP:
 
         Returns:
         responses -- a list of dictionaries for each response found in the message.
+        You don't have to do anything with this if you have already registered a listener for the messages.
         """
         responses = []
         if len(msg) % 12 != 0:
-            print "'%s'" % msg
-            raise Exception("message not divisible by 12")
-        msg_count = len(msg) / 12
-        s = 0
-        for i in range(1, msg_count + 1):
-            e = i * 12
-            responses.append(self.split_response(msg[s:e]))
-            s += 12  # increment start ready for next loop
+            self.notify_observers(
+                'ERROR',
+                {
+                    'responseType': 'ERROR',
+                    'responseValue': 'Serial message not divisible by twelve',
+                    'msg': msg,
+                    'time': time()
+                }
+            )
+        if len(msg) >= 12:
+            # attempt to process as much as we can...
+            # find the first lower case a in the string and trim msg to that.
+            msg = msg[msg.index('a'):]
+            msg_count = len(msg) / 12
+            s = 0
+            for i in range(1, msg_count + 1):
+                e = i * 12
+                responses.append(self.split_response(msg[s:e]))
+                s += 12  # increment start ready for next loop
         return responses
 
     def build_request(self, devid, type):
@@ -78,14 +91,16 @@ class LLAP:
         self.validate_msg(request)
         return request
 
-    def validate_msg(self, msg):
+    @staticmethod
+    def validate_msg(msg):
         if len(msg) > 12:
             # todo - raise some more specific Exceptions
-            raise Exception("completed request is too long")
+            raise LlapException("completed request is too long")
 
-    def validate_request(self, d, t):
+    @staticmethod
+    def validate_request(d, t):
         if len(d) > 2 or len(t) > 9:
-            raise Exception("invalid parameters to build_request")
+            raise LlapException("invalid parameters to build_request")
 
     def register_observer(self, event, observer):
         """Register an observer to deal with each response found.
@@ -99,9 +114,28 @@ class LLAP:
         """
         self.observers.append({event: observer})
 
+    def unregister_observer(self, event, observer):
+        newList = []
+        flag = False
+        for observerDict in self.observers:
+            if observerDict.keys()[0] == event:
+                if observerDict[event] == observer:
+                    flag = True
+            if flag is not True:
+                newList.append(observerDict)
+        self.observers = newList
+
     def notify_observers(self, event, data):
         for observer in self.observers:
             if observer.keys()[0] == event or observer.keys()[0] == 'ALL':
                 observer.values()[0](data)
+
+
+class LlapException(Exception):
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 #ends
