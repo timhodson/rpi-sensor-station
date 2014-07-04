@@ -14,7 +14,8 @@
     "firebase": "~1.0.2",
     "angularfire": "~0.7.1",
     "firebase-simple-login": "~1.0.2",
-    "angular-charts": "~0.6.0"
+    "angular-charts": "~0.2.4",
+    "angular-bootstrap": "~0.11.0"
   },
   "devDependencies": {
     "angular-mocks": "1.2.6",

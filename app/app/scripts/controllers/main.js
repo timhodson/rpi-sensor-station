@@ -4,9 +4,12 @@ angular.module('appApp')
   .controller('MainCtrl', ['$scope', 'syncData', 'snapshot', 'dateFilter', '$q', function ($scope, syncData, snapshot, dateFilter, $q) {
 
     $scope.ght = syncData('AB', 1);
+    $scope.ghtStatus = syncData('AB/status', 1);
+    $scope.recentErrors = syncData('/errors', 10);
     $scope.ghtReadings = 12;
 
     $scope.lt = syncData('AA', 1);
+    $scope.ltStatus = syncData('AA/status', 1);
     $scope.ltReadings = 6;
 
     $scope.getDate = function (timestamp) {
@@ -47,8 +50,9 @@ angular.module('appApp')
           var dateLabel = dateFilter(new Date(parseFloat(d.child('time').val()) * 1000), 'yyyy-MM-dd HH:mm:ss');
           dp.x = dateLabel;
           dp.y = [];
-          dp.y.push(parseFloat(d.child('responseValue').val()));
-          dp.tooltip = dateLabel;
+          var reading = d.child('responseValue').val();
+          dp.y.push(parseFloat(reading));
+          dp.tooltip = reading + 'ºC - ' + dateLabel;
           chartData.data.push(dp);
         });
         deferred.resolve(chartData);

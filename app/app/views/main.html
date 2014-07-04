@@ -15,8 +15,13 @@
                 </h1>
             </div>
             <div class="panel-footer">
-                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
                 <p>Green House Temperature</p>
+                <small class="pull-right" ng-repeat="status in ghtStatus"
+                       popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
+                       popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
+                    {{status.responseValue}}
+                </small>
+                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
             </div>
         </div>
     </div>
@@ -29,11 +34,18 @@
                 </h1>
             </div>
             <div class="panel-footer">
-                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
                 <p>Lounge Temperature</p>
+                <small class="pull-right" ng-repeat="status in ltStatus"
+                       popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
+                       popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
+                    {{status.responseValue}}
+                </small>
+                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
             </div>
         </div>
     </div>
+
+
 </div>
 
 </div>
@@ -61,6 +73,15 @@
     </div>
     <div class="panel-body">
         <div ac-chart="chartType" ac-data="chartData2" ac-config="chartConfig2" id='chart' class='chart'></div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4 class="panel-title"><span class="glyphicon glyphicon-warning-sign"></span> Errors?</h4>
+    </div>
+    <div class="panel-body">
+        <alert ng-repeat="alert in lastErrors" type="danger" close="closeAlert($index)">{{alert}}</alert>
     </div>
 </div>
 <div class="footer">
