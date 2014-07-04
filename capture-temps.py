@@ -58,10 +58,10 @@ def firebase_error_writer_callback(data):
     Expecting to see ERROR messages
     """
     print pformat(data)
-    # fb = fb_connect()
-    # data['.priority'] = int(data['time'])
-    # data['readingID'] = str(data['time']).replace('.', data['responseType'])
-    # fb.put('/errors', data['readingId'], data)
+    fb = fb_connect()
+    data['.priority'] = int(data['time'])
+    data['readingId'] = str(data['time']).replace('.', data['responseType'])
+    fb.put('/errors', data['readingId'], data)
 
 
 def firebase_status_writer_callback(data):
@@ -69,6 +69,10 @@ def firebase_status_writer_callback(data):
      Expecting to see BATT and BATTLOW messages
     """
     print pformat(data)
+    fb = fb_connect()
+    data['.priority'] = int(data['time'])
+    data['readingId'] = str(data['time']).replace('.', data['deviceId'])
+    fb.put('/' + data['deviceId'] + '/status', data['readingId'], data)
     pass
 
 # set up our llap callbacks
