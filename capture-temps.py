@@ -8,6 +8,7 @@ import os
 from LLAP import LLAP
 from firebase import firebase
 from pprint import pformat
+import requests
 
 # serial configuration
 DEVICE = '/dev/ttyAMA0'
@@ -45,12 +46,27 @@ def csv_writer_callback(response):
     ofh.flush()
 
 
+def fb_retry(fb, url, identifier, data, seconds):
+    sleep(seconds)
+    try:
+        fb.put(url, identifier, data)
+    except requests.Timeout:
+        print "fb_retry: Got a Timeout: will retry in %d seconds." % seconds + 60
+        fb_retry(url, identifier, data, seconds + 60)
+
+
 def firebase_data_writer_callback(data):
     # write some data to firebase for temperature readings.\
     fb = fb_connect()  # only connect when we actually want to write to fb
     data['.priority'] = int(data['time'])
     data['readingId'] = str(data['time']).replace('.', data['deviceId'])  # replace period with deviceID
-    fb.put('/' + data['deviceId'], data['readingId'], data)
+    url = '/' + data['deviceId']
+    identifier = data['readingId']
+    try:
+        fb.put(url, identifier, data)
+    except requests.Timeout:
+        print "Writing Data to Firebase: Got a Timeout: will retry in 60 seconds."
+        fb_retry(fb, url, identifier, data, 60)
 
 
 def firebase_error_writer_callback(data):
@@ -61,7 +77,13 @@ def firebase_error_writer_callback(data):
     fb = fb_connect()
     data['.priority'] = int(data['time'])
     data['readingId'] = str(data['time']).replace('.', data['responseType'])
-    fb.put('/errors', data['readingId'], data)
+    url = '/errors'
+    identifier = data['readingId']
+    try:
+        fb.put(url, identifier, data)
+    except requests.Timeout:
+        print "Writing Errors to Firebase: Got a Timeout: will retry in 60 seconds."
+        fb_retry(fb, url, identifier, data, 60)
 
 
 def firebase_status_writer_callback(data):
@@ -72,8 +94,14 @@ def firebase_status_writer_callback(data):
     fb = fb_connect()
     data['.priority'] = int(data['time'])
     data['readingId'] = str(data['time']).replace('.', data['deviceId'])
-    fb.put('/' + data['deviceId'] + '/status', data['readingId'], data)
-    pass
+    url = '/' + data['deviceId'] + '/status'
+    identifier = data['readingId']
+    try:
+        fb.put(url, identifier, data)
+    except requests.Timeout:
+        print "Writing Status to Firebase: Got a Timeout: will retry in 60 seconds."
+        fb_retry(fb, url, identifier, data, 60)
+
 
 # set up our llap callbacks
 llap = LLAP()
