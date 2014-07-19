@@ -30,18 +30,22 @@ ofh = open(outfile, 'w')
 csv_writer = csv.writer(ofh, dialect='excel')
 
 
+def log_msg(msg):
+    print "%s: %s" % (strftime("%a, %d %b %Y %H:%M:%S", gmtime()), msg)
+
+
 def fb_connect():
     """
      Connect to Firebase
     """
-    print "Connecting to firebase"
+    log_msg("Connecting to firebase")
     authentication = firebase.FirebaseAuthentication(os.getenv('FIREBASE_TOKEN'), os.getenv('FIREBASE_EMAIL'))
     fb = firebase.FirebaseApplication('https://rpi-sensor-network.firebaseio.com/', authentication)
     return fb
 
 
 def csv_writer_callback(response):
-    print response.values()
+    log_msg(response.values())
     csv_writer.writerow(response.values())
     ofh.flush()
 
@@ -50,9 +54,10 @@ def fb_retry(fb, url, identifier, data, seconds):
     sleep(seconds)
     try:
         fb.put(url, identifier, data)
-    except requests.Timeout:
-        print "fb_retry: Got a Timeout: will retry in %d seconds." % seconds + 60
-        fb_retry(url, identifier, data, seconds + 60)
+        log_msg("Written to firebase")
+    except (requests.Timeout, requests.ConnectionError, requests.RequestException, requests.HTTPError) as e:
+        log_msg("fb_retry: Got an Exception: will retry in %d seconds. \n%s" % (int(seconds) + 60, e))
+        fb_retry(fb, url, identifier, data, seconds + 60)
 
 
 def firebase_data_writer_callback(data):
@@ -64,8 +69,9 @@ def firebase_data_writer_callback(data):
     identifier = data['readingId']
     try:
         fb.put(url, identifier, data)
-    except requests.Timeout:
-        print "Writing Data to Firebase: Got a Timeout: will retry in 60 seconds."
+        log_msg("Written to firebase")
+    except (requests.Timeout, requests.ConnectionError, requests.RequestException, requests.HTTPError) as e:
+        log_msg("Writing Data to Firebase: Got a Timeout: will retry in 60 seconds.\n%s" % e)
         fb_retry(fb, url, identifier, data, 60)
 
 
@@ -73,7 +79,6 @@ def firebase_error_writer_callback(data):
     """
     Expecting to see ERROR messages
     """
-    print pformat(data)
     fb = fb_connect()
     data['.priority'] = int(data['time'])
     data['readingId'] = str(data['time']).replace('.', data['responseType'])
@@ -81,8 +86,9 @@ def firebase_error_writer_callback(data):
     identifier = data['readingId']
     try:
         fb.put(url, identifier, data)
-    except requests.Timeout:
-        print "Writing Errors to Firebase: Got a Timeout: will retry in 60 seconds."
+        log_msg("Written to firebase")
+    except (requests.Timeout, requests.ConnectionError, requests.RequestException, requests.HTTPError) as e:
+        log_msg("Writing Errors to Firebase: Got a Timeout: will retry in 60 seconds.\n%s" % e)
         fb_retry(fb, url, identifier, data, 60)
 
 
@@ -90,7 +96,6 @@ def firebase_status_writer_callback(data):
     """
      Expecting to see BATT and BATTLOW messages
     """
-    print pformat(data)
     fb = fb_connect()
     data['.priority'] = int(data['time'])
     data['readingId'] = str(data['time']).replace('.', data['deviceId'])
@@ -98,8 +103,9 @@ def firebase_status_writer_callback(data):
     identifier = data['readingId']
     try:
         fb.put(url, identifier, data)
-    except requests.Timeout:
-        print "Writing Status to Firebase: Got a Timeout: will retry in 60 seconds."
+        log_msg("Written to firebase")
+    except (requests.Timeout, requests.ConnectionError, requests.RequestException, requests.HTTPError) as e:
+        log_msg("Writing Status to Firebase: Got a Timeout: will retry in 60 seconds.\n%s" % e)
         fb_retry(fb, url, identifier, data, 60)
 
 
@@ -112,15 +118,15 @@ llap.register_observer('BATT', firebase_status_writer_callback)
 llap.register_observer('ERROR', firebase_error_writer_callback)
 
 
-print (strftime("%a, %d %b %Y %H:%M:%S: Starting\n", gmtime()))
+log_msg("Starting")
 
 ser = serial.Serial(DEVICE, BAUD)
 while True:
-    print("%s: Checking..." % strftime("%a, %d %b %Y %H:%M:%S", gmtime()))
+    log_msg("Checking...")
     n = ser.inWaiting()
     if n != 0:
         msg = ser.read(n)
-        print("%s: %s" % (strftime("%a, %d %b %Y %H:%M:%S", gmtime()), msg))
+        log_msg(msg)
 
         # this is all we need to call now that we have registered our callbacks!
         llap.get_responses(msg)

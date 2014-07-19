@@ -110,6 +110,7 @@ class TestLLAPFunctionality(unittest.TestCase):
     def print_data(self, data):
         print "EVENT %s TRIGGERED and passed DATA: %s" % (data['responseType'], pformat(data))
 
+
 def suite1():
     suite = unittest.TestSuite()
     suite.addTest(TestLLAPFunctionality("test_build_request"))
