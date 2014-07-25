@@ -1,6 +1,7 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "rpi-sensor-station",
+  "version": "0.1.0",
+  "description": "a web app for viewing sensor data collected in a firebase database",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
@@ -19,12 +20,13 @@
     "grunt-contrib-jshint": "~0.7.1",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-watch": "~0.5.2",
-    "grunt-google-cdn": "~0.2.0",
+    "grunt-google-cdn": "~0.4.0",
     "grunt-newer": "~0.5.4",
     "grunt-ngmin": "~0.0.2",
     "grunt-rev": "~0.1.0",
     "grunt-svgmin": "~0.2.0",
     "grunt-usemin": "~2.0.0",
+    "grunt-s3": "~0.2.0-alpha.3",
     "jshint-stylish": "~0.1.3",
     "load-grunt-tasks": "~0.2.0",
     "time-grunt": "~0.2.1",
@@ -38,5 +40,6 @@
   },
   "scripts": {
     "test": "grunt test"
-  }
+  },
+  "repository" :"https://github.com/timhodson/rpi-sensor-station"
 }
