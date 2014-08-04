@@ -316,6 +316,26 @@ module.exports = function (grunt) {
         'svgmin'
       ]
     },
+    s3: {
+      options: {
+        key: process.env.SENSORS_AWS_KEY,
+        secret: process.env.SENSORS_AWS_SECRET,
+        access: 'public-read',
+        region: 'eu-west-1'
+      },
+      production: {
+        options: {
+          bucket: 'sensors.timhodson.com'
+        },
+        upload: [
+          {
+            src: 'dist/**/*.*',
+            dest: '/',
+            rel: 'dist'
+          }
+        ]
+      }
+    },
 
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
@@ -403,4 +423,11 @@ module.exports = function (grunt) {
     'test',
     'build'
   ]);
+
+  grunt.registerTask('deploy', [
+    'build',
+    's3:production'
+  ]);
+
+  grunt.registerTask('deploy-no-build', ['s3:production']);
 };
