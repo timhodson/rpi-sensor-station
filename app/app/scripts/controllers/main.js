@@ -5,12 +5,22 @@ angular.module('appApp')
 
     $scope.ght = syncData('AB', 1);
     $scope.ghtStatus = syncData('AB/status', 1);
-    $scope.recentErrors = syncData('/errors', 10);
     $scope.ghtReadings = 12;
 
     $scope.lt = syncData('AA', 1);
     $scope.ltStatus = syncData('AA/status', 1);
     $scope.ltReadings = 6;
+
+    // error fetching
+    $scope.maxErrors = 8;
+    $scope.errorPage = 0;
+    $scope.getErrors = function(){
+      snapshot('/errors', $scope.maxErrors, $scope.errorPage, function(data){
+        $scope.recentErrors = data.val();
+      });
+    };
+    $scope.getErrors(); // called the first time round.
+
 
     $scope.getDate = function (timestamp) {
       var date = new Date(parseFloat(timestamp) * 1000);
@@ -105,3 +115,21 @@ angular.module('appApp')
     $scope.chartType = 'line';
 
   }]);
+
+angular.module('appApp')
+  .filter('orderObjectBy', function() {
+    return function(items, field, reverse) {
+      var filtered = [];
+      angular.forEach(items, function(item) {
+        filtered.push(item);
+      });
+      filtered.sort(function (a, b) {
+        return (a[field] > b[field] ? 1 : -1);
+      });
+      if(reverse){
+        filtered.reverse();
+      }
+      console.log(filtered);
+      return filtered;
+    };
+  });

@@ -81,7 +81,13 @@
         <h4 class="panel-title"><span class="glyphicon glyphicon-warning-sign"></span> Errors?</h4>
     </div>
     <div class="panel-body">
-        <alert ng-repeat="alert in lastErrors" type="danger" close="closeAlert($index)">{{alert}}</alert>
+
+        <alert ng-repeat="alert in recentErrors | orderObjectBy:'time':true" type="danger" close="closeAlert($index)">
+          <strong>{{getDate(alert.time) | date:'dd MMMM yyyy HH:mm:ss' }}</strong>
+          <p>Error: {{alert.responseValue}}</p>
+          <p>Value that triggered error: </p><textarea class="form-control" rows="{{alert.msg.length/55}}">{{alert.msg}}</textarea>
+
+        </alert>
     </div>
 </div>
 <div class="footer">
