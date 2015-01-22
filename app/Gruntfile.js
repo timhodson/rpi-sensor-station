@@ -147,9 +147,6 @@ module.exports = function (grunt) {
       }
     },
 
-
-
-
     // Compiles Sass to CSS and generates necessary files if requested
     compass: {
       options: {
@@ -316,26 +313,34 @@ module.exports = function (grunt) {
         'svgmin'
       ]
     },
-    s3: {
+    aws_s3: {
       options: {
-        key: process.env.SENSORS_AWS_KEY,
-        secret: process.env.SENSORS_AWS_SECRET,
+        accessKeyId: process.env.SENSORS_AWS_KEY,
+        secretAccessKey: process.env.SENSORS_AWS_SECRET,
         access: 'public-read',
-        region: 'eu-west-1'
+        region: 'eu-west-1',
+        uploadConcurrency: 5,
+        progress: 'progressBar'
       },
-      production: {
+      deploy: {
         options: {
-          bucket: 'sensors.timhodson.com'
+          bucket: 'sensors.timhodson.com',
+          differential: true
         },
-        upload: [
-          {
-            src: 'dist/**/*.*',
-            dest: '/',
-            rel: 'dist'
+        files: [
+          {action: 'download', dest: '/', cwd: 'backup/production-<%= grunt.template.today("dd-mm-yyyy-HH-MM-ss") %>/'},
+          {action: 'delete', dest: '/', cwd: 'dist/'},
+          {action: 'upload', expand: true, cwd: 'dist/', src: ['**/*.*'], dest: '', filter: function(src){
+            if(src.indexOf('dist/bower_components/') !== -1){
+              return false;
+            }
+            return true;
+          }
           }
         ]
       }
     },
+
 
     // By default, your `index.html`'s <!-- Usemin block --> will take care of
     // minification. These next options are pre-configured if you do not wish
@@ -426,8 +431,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('deploy', [
     'build',
-    's3:production'
+    'aws_s3:deploy'
   ]);
 
-  grunt.registerTask('deploy-no-build', ['s3:production']);
+  grunt.registerTask('deploy-no-build', ['aws_s3:deploy']);
 };
