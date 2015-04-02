@@ -3,13 +3,20 @@
 angular.module('appApp')
   .controller('MainCtrl', ['$scope', 'syncData', 'snapshot', 'dateFilter', '$q', function ($scope, syncData, snapshot, dateFilter, $q) {
 
+    // greenhouse
     $scope.ght = syncData('AB', 1);
     $scope.ghtStatus = syncData('AB/status', 1);
     $scope.ghtReadings = 12;
 
+    // rear lounge
     $scope.lt = syncData('AA', 1);
     $scope.ltStatus = syncData('AA/status', 1);
     $scope.ltReadings = 6;
+
+    // front lounge
+    $scope.flt = syncData('AC', 1);
+    $scope.fltStatus = syncData('AC/status', 1);
+    $scope.fltReadings = 6;
 
     // error fetching
     $scope.maxErrors = 8;
@@ -109,6 +116,16 @@ angular.module('appApp')
       }); // taken every 10 mins
       $scope.getChartConfig($scope.ltReadings, 10).then(function (data) {
         $scope.chartConfig2 = data;
+      });
+    }, true);
+
+    $scope.$watch('[flt, fltReadings]', function () {
+      //$scope.chartData2 = {};
+      $scope.getChartData('AC', $scope.ltReadings).then(function (data) {
+        $scope.chartData3 = data;
+      }); // taken every 10 mins
+      $scope.getChartConfig($scope.ltReadings, 10).then(function (data) {
+        $scope.chartConfig3 = data;
       });
     }, true);
 

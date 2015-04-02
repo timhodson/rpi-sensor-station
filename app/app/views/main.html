@@ -1,95 +1,131 @@
 <div class="header">
-    <ul class="nav nav-pills pull-right">
-        <li class="active"><a ng-href="http://timhodson.com">timhodson.com</a></li>
-        <li><a ng-href="http://timhodson.com/2014/04/rpi-sensor-network-collecting-the-data/">About</a></li>
-        <li><a ng-href="http://timhodson.com/contact">Contact</a></li>
-    </ul>
-    <h3 class="text-muted">RPi Sensor Station</h3>
+  <ul class="nav nav-pills pull-right">
+    <li class="active"><a ng-href="http://timhodson.com">timhodson.com</a></li>
+    <li><a ng-href="http://timhodson.com/2014/04/rpi-sensor-network-collecting-the-data/">About</a></li>
+    <li><a ng-href="http://timhodson.com/contact">Contact</a></li>
+  </ul>
+  <h3 class="text-muted">RPi Sensor Station</h3>
 </div>
 <div class="row">
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <div class="panel panel-default " ng-repeat="temp in ght">
-            <div class="panel-body">
-                <h1 class="sensor-reading"><span class="glyphicon glyphicon-leaf"></span> {{temp.responseValue}}
-                    <small>ºC</small>
-                </h1>
-            </div>
-            <div class="panel-footer">
-                <p>Green House Temperature</p>
-                <small class="pull-right" ng-repeat="status in ghtStatus"
-                       popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
-                       popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
-                    {{status.responseValue}}
-                </small>
-                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
-            </div>
-        </div>
+  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="panel panel-default " ng-repeat="temp in ght">
+      <div class="panel-body">
+        <h1 class="sensor-reading"><span class="glyphicon glyphicon-leaf"></span> {{temp.responseValue}}
+          <small>ºC</small>
+        </h1>
+      </div>
+      <div class="panel-footer">
+        <p>Green House Temperature</p>
+        <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}<br/></small>
+        <small class="" ng-repeat="status in ghtStatus"
+               popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
+               popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
+          {{status.responseValue}}
+        </small>
+      </div>
     </div>
+  </div>
+  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="panel panel-default " ng-repeat="temp in flt">
+      <div class="panel-body">
+        <h1 class="sensor-reading"><span class="glyphicon glyphicon-home"></span> {{temp.responseValue}}
+          <small>ºC</small>
+        </h1>
+      </div>
+      <div class="panel-footer">
+        <p>Front Lounge Temperature</p>
+        <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}<br/></small>
+        <small class="" ng-repeat="status in fltStatus"
+               popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
+               popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
+          {{status.responseValue}}
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+    <div class="panel panel-default " ng-repeat="temp in lt">
+      <div class="panel-body">
+        <h1 class="sensor-reading"><span class="glyphicon glyphicon-home"></span> {{temp.responseValue}}
+          <small>ºC</small>
+        </h1>
+      </div>
+      <div class="panel-footer">
+        <p>Rear Lounge Temperature</p>
+        <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}<br/></small>
+        <small class="" ng-repeat="status in ltStatus"
+               popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
+               popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
+          {{status.responseValue}}
+        </small>
+      </div>
+    </div>
+  </div>
 
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-        <div class="panel panel-default " ng-repeat="temp in lt">
-            <div class="panel-body">
-                <h1 class="sensor-reading"><span class="glyphicon glyphicon-home"></span> {{temp.responseValue}}
-                    <small>ºC</small>
-                </h1>
-            </div>
-            <div class="panel-footer">
-                <p>Lounge Temperature</p>
-                <small class="pull-right" ng-repeat="status in ltStatus"
-                       popover="{{getDate(status.time) | date:'dd MMMM yyyy HH:mm:ss'}}" popover-title="Last updated"
-                       popover-placement="left" popover-trigger="mouseenter">status: {{status.responseType}}
-                    {{status.responseValue}}
-                </small>
-                <small>{{getDate(temp.time) | date:'dd MMMM yyyy HH:mm:ss'}}</small>
-            </div>
-        </div>
-    </div>
+
 
 
 </div>
 
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="btn-group btn-group-xs pull-right">
-            <button class="btn btn-default" ng-click="ghtReadings=288">24 Hrs</button>
-            <button class="btn btn-default" ng-click="ghtReadings=144">12 Hrs</button>
-            <button class="btn btn-default" ng-click="ghtReadings=12">1 Hr</button>
-        </div>
-        <h4 class="panel-title"><span class="glyphicon glyphicon-leaf"></span> Green House</h4>
+  <div class="panel-heading">
+    <div class="btn-group btn-group-xs pull-right">
+      <button class="btn btn-default" ng-click="ghtReadings=288">24 Hrs</button>
+      <button class="btn btn-default" ng-click="ghtReadings=144">12 Hrs</button>
+      <button class="btn btn-default" ng-click="ghtReadings=12">1 Hr</button>
     </div>
-    <div class="panel-body">
-        <div ac-chart="chartType" ac-data="chartData1" ac-config="chartConfig1" id='chart' class='chart'></div>
-    </div>
+    <h4 class="panel-title"><span class="glyphicon glyphicon-leaf"></span> Green House</h4>
+  </div>
+  <div class="panel-body">
+    <div ac-chart="chartType" ac-data="chartData1" ac-config="chartConfig1" id='chart1' class='chart'></div>
+  </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <div class="btn-group btn-group-xs pull-right">
-            <button class="btn btn-default" ng-click="ltReadings=144">24 Hrs</button>
-            <button class="btn btn-default" ng-click="ltReadings=72">12 Hrs</button>
-            <button class="btn btn-default" ng-click="ltReadings=6">1 Hr</button>
-        </div>
-        <h4 class="panel-title"><span class="glyphicon glyphicon-home"></span> Lounge</h4>
+  <div class="panel-heading">
+    <div class="btn-group btn-group-xs pull-right">
+      <button class="btn btn-default" ng-click="fltReadings=144">24 Hrs</button>
+      <button class="btn btn-default" ng-click="fltReadings=72">12 Hrs</button>
+      <button class="btn btn-default" ng-click="fltReadings=6">1 Hr</button>
     </div>
-    <div class="panel-body">
-        <div ac-chart="chartType" ac-data="chartData2" ac-config="chartConfig2" id='chart' class='chart'></div>
+    <h4 class="panel-title"><span class="glyphicon glyphicon-home"></span> Front Lounge</h4>
+  </div>
+  <div class="panel-body">
+    <div ac-chart="chartType" ac-data="chartData3" ac-config="chartConfig3" id='chart3' class='chart'></div>
+  </div>
+</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <div class="btn-group btn-group-xs pull-right">
+      <button class="btn btn-default" ng-click="ltReadings=144">24 Hrs</button>
+      <button class="btn btn-default" ng-click="ltReadings=72">12 Hrs</button>
+      <button class="btn btn-default" ng-click="ltReadings=6">1 Hr</button>
     </div>
+    <h4 class="panel-title"><span class="glyphicon glyphicon-home"></span> Rear Lounge</h4>
+  </div>
+  <div class="panel-body">
+    <div ac-chart="chartType" ac-data="chartData2" ac-config="chartConfig2" id='chart2' class='chart'></div>
+  </div>
 </div>
 
+
 <div class="panel panel-default">
-    <div class="panel-heading">
-        <h4 class="panel-title"><span class="glyphicon glyphicon-warning-sign"></span> Errors?</h4>
-    </div>
-    <div class="panel-body">
+  <div class="panel-heading">
+    <h4 class="panel-title"><span class="glyphicon glyphicon-warning-sign"></span> Errors?</h4>
+  </div>
+  <div class="panel-body">
 
-        <alert ng-repeat="alert in recentErrors | orderObjectBy:'time':true" type="danger" close="closeAlert($index)">
-          <strong>{{getDate(alert.time) | date:'dd MMMM yyyy HH:mm:ss' }}</strong>
-          <p>Error: {{alert.responseValue}}</p>
-          <p>Value that triggered error: </p><textarea class="form-control" rows="{{alert.msg.length/55}}">{{alert.msg}}</textarea>
+    <alert ng-repeat="alert in recentErrors | orderObjectBy:'time':true" type="danger" close="closeAlert($index)">
+      <strong>{{getDate(alert.time) | date:'dd MMMM yyyy HH:mm:ss' }}</strong>
 
-        </alert>
-    </div>
+      <p>Error: {{alert.responseValue}}</p>
+
+      <p>Value that triggered error: </p><textarea class="form-control"
+                                                   rows="{{alert.msg.length/55}}">{{alert.msg}}</textarea>
+
+    </alert>
+  </div>
 </div>
 <div class="footer">
-    <p><a href="http://timhodson.com" title="Who bothered to build this?">timhodson.com</a></p>
+  <p><a href="http://timhodson.com" title="Who bothered to build this?">timhodson.com</a></p>
 </div>
