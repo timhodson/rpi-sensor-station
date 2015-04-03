@@ -121,10 +121,10 @@ angular.module('appApp')
 
     $scope.$watch('[flt, fltReadings]', function () {
       //$scope.chartData2 = {};
-      $scope.getChartData('AC', $scope.ltReadings).then(function (data) {
+      $scope.getChartData('AC', $scope.fltReadings).then(function (data) {
         $scope.chartData3 = data;
       }); // taken every 10 mins
-      $scope.getChartConfig($scope.ltReadings, 10).then(function (data) {
+      $scope.getChartConfig($scope.fltReadings, 10).then(function (data) {
         $scope.chartConfig3 = data;
       });
     }, true);
