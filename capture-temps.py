@@ -13,21 +13,22 @@ import requests
 # serial configuration
 DEVICE = '/dev/ttyAMA0'
 BAUD = 9600
+MAX_RETRY_WAIT_SECONDS=360
 
 # check some vars that we need before we get going
 # output file generation
 if len(sys.argv) < 2:
-    print "Exit: No filename given"
-    exit()
+    print "INFO: No filename given"
+    SKIP_OUTPUT_FILE = True
+else:
+    outfile = sys.argv[1]
+    ofh = open(outfile, 'w')
+    csv_writer = csv.writer(ofh, dialect='excel')
 
 # firebase configuration
 if any([os.getenv('FIREBASE_TOKEN') is None, os.getenv('FIREBASE_EMAIL') is None]):
     print "\nBoth FIREBASE_TOKEN and FIREBASE_EMAIL must be set in your OS environment"
     exit(1)
-
-outfile = sys.argv[1]
-ofh = open(outfile, 'w')
-csv_writer = csv.writer(ofh, dialect='excel')
 
 
 def log_msg(msg):
@@ -51,6 +52,8 @@ def csv_writer_callback(response):
 
 
 def fb_retry(fb, url, identifier, data, seconds):
+    if seconds > MAX_RETRY_WAIT_SECONDS:
+        seconds = MAX_RETRY_WAIT_SECONDS
     sleep(seconds)
     try:
         fb.put(url, identifier, data)
@@ -111,7 +114,8 @@ def firebase_status_writer_callback(data):
 
 # set up our llap callbacks
 llap = LLAP()
-llap.register_observer('ALL', csv_writer_callback)
+if not SKIP_OUTPUT_FILE:
+    llap.register_observer('ALL', csv_writer_callback)
 llap.register_observer('TMPA', firebase_data_writer_callback)
 llap.register_observer('BATTLOW', firebase_status_writer_callback)
 llap.register_observer('BATT', firebase_status_writer_callback)
