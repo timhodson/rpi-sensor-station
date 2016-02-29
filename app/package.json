@@ -2,6 +2,7 @@
   "name": "rpi-sensor-station",
   "version": "0.1.0",
   "description": "a web app for viewing sensor data collected in a firebase database",
+  "readme": "README.md",
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
