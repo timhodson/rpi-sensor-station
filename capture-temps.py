@@ -117,7 +117,7 @@ llap = LLAP()
 if not SKIP_OUTPUT_FILE:
     llap.register_observer('ALL', csv_writer_callback)
 llap.register_observer('TMPA', firebase_data_writer_callback)
-llap.register_observer('HUM', firebase_data_writer_callback)
+llap.register_observer('RHUM', firebase_data_writer_callback)
 llap.register_observer('TEMP', firebase_data_writer_callback)
 llap.register_observer('BATTLOW', firebase_status_writer_callback)
 llap.register_observer('BATT', firebase_status_writer_callback)

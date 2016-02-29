@@ -10,7 +10,7 @@ class LLAP:
         'AWAKE': 'Device is awake',
         'TMPA': 'temperature reading',
         'TEMP': 'temperature reading',
-        'HUM': 'humidity reading',
+        'RHUM': 'humidity reading',
         'BATTLOW': 'battery low',
         'BATT': 'battery reading',
         'SLEEPING': 'Device is going to sleep',
