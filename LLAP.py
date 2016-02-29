@@ -1,6 +1,7 @@
+from time import time
+
 __author__ = 'timhodson'
 
-from time import time
 
 # a python module to support llap
 # currently mainly the llap Thermister device Persona
@@ -8,6 +9,8 @@ class LLAP:
     RESPONSES = {
         'AWAKE': 'Device is awake',
         'TMPA': 'temperature reading',
+        'TEMP': 'temperature reading',
+        'RHUM': 'humidity reading',
         'BATTLOW': 'battery low',
         'BATT': 'battery reading',
         'SLEEPING': 'Device is going to sleep',
@@ -19,6 +22,7 @@ class LLAP:
         'APVER': 'LLAP version number',
         'BATT': 'Battery level in volts',
         'TEMP': 'request the temperature',
+        'HUM': 'request the humidity',
         # not bothered with the other 'tweeks' that we could do.
     }
 
@@ -137,5 +141,3 @@ class LlapException(Exception):
 
     def __str__(self):
         return repr(self.value)
-
-#ends
