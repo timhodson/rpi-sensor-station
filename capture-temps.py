@@ -134,18 +134,19 @@ while True:
     n = ser.inWaiting()
     if n != 0:
         current_msg = ser.read(n)
+        msg = msg + current_msg
 
-        if len(current_msg) % 12 != 0:
-            # wait for some more messages to come through...
-            msg = msg + current_msg
-            log_msg("Partial message: {}".format(msg))
+        if msg != '':
+            if len(msg) % 12 != 0:
+                # wait for some more messages to come through...
+                log_msg("Partial message: {}".format(msg))
 
-        if msg != '' and len(msg) % 12 == 0:
-            log_msg("Full Message: {}".format(msg))
-            # this is all we need to call now that we have registered our callbacks!
-            llap.get_responses(msg)
-            # empty msg string
-            msg = ''
+            if len(msg) % 12 == 0:
+                log_msg("Full Message: {}".format(msg))
+                # this is all we need to call now that we have registered our callbacks!
+                llap.get_responses(msg)
+                # empty msg string
+                msg = ''
 
     # wait for this length of time before reading more from the serial port.
     sleep(1 * 60)
