@@ -14,6 +14,7 @@ import requests
 DEVICE = '/dev/ttyAMA0'
 BAUD = 9600
 MAX_RETRY_WAIT_SECONDS=360
+SKIP_OUTPUT_FILE=None
 
 # check some vars that we need before we get going
 # output file generation
@@ -127,15 +128,26 @@ llap.register_observer('ERROR', firebase_error_writer_callback)
 log_msg("Starting")
 
 ser = serial.Serial(DEVICE, BAUD)
+msg = ''
 while True:
     log_msg("Checking...")
     n = ser.inWaiting()
     if n != 0:
-        msg = ser.read(n)
-        log_msg(msg)
+        current_msg = ser.read(n)
+        msg = msg + current_msg
 
-        # this is all we need to call now that we have registered our callbacks!
-        llap.get_responses(msg)
+        if msg != '':
+            if len(msg) % 12 != 0:
+                # wait for some more messages to come through...
+                log_msg("Partial message: {}".format(msg))
 
+            if len(msg) % 12 == 0:
+                log_msg("Full Message: {}".format(msg))
+                # this is all we need to call now that we have registered our callbacks!
+                llap.get_responses(msg)
+                # empty msg string
+                msg = ''
+
+    # wait for this length of time before reading more from the serial port.
     sleep(1 * 60)
 
